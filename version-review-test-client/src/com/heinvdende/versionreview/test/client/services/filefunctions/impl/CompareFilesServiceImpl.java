@@ -84,13 +84,13 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         String oldFilePath = service.getCommittedFile(newVersion.getFilePath());
         
         CodeFile oldVersion = null;
-        if(oldFilePath == null) {
+        /*if(oldFilePath == null) {
             oldVersion = createDummyFile();
         }
-        else {
+        else {*/
             oldVersion = new CodeFile();
             oldVersion.setFilePath(oldFilePath);
-        }
+        //}
         
         ChangedCodeFile file = new ChangedCodeFile();
         file.setFilePath(newVersion.getFilePath());
@@ -120,38 +120,46 @@ public class CompareFilesServiceImpl implements CompareFilesService {
     private ClassOrInterfaceDeclaration getClassDeclarations(String path) {
         CompilationUnit cu = getCompulationUnit(path); 
         
-        ClassVisitor visitor = new ClassVisitor();
-        visitor.visit(cu, null);
+        if(cu != null) {
+            ClassVisitor visitor = new ClassVisitor();
+            visitor.visit(cu, null);
+
+            return visitor.getFileClass();
+        }
         
-        return visitor.getFileClass();
+        return null;
     }
     
     private CompilationUnit getCompulationUnit(String file) {
-        FileInputStream in = null;
-        CompilationUnit cu = null;
-        FileNotFoundException exception = new FileNotFoundException("Was not file exception.");
-        try {
-            in = new FileInputStream(file);
-            
-        
-            if(in != null) {
-                cu = JavaParser.parse(in);  
-                in.close();
-            
-                return cu;
+        if(file != null) {
+            FileInputStream in = null;
+            CompilationUnit cu = null;
+            FileNotFoundException exception = new FileNotFoundException("Was not file exception.");
+            try {
+                in = new FileInputStream(file);
+
+
+                if(in != null) {
+                    cu = JavaParser.parse(in);  
+                    in.close();
+
+                    return cu;
+                }
             }
+            catch(FileNotFoundException ex) {
+                exception = ex;
+            }
+            catch (ParseException ex) {
+                Logger.getLogger(CompareFilesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(CompareFilesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }   
+
+            throw new RuntimeException("File Exception:\n" + exception.getMessage());
         }
-        catch(FileNotFoundException ex) {
-            exception = ex;
-        }
-        catch (ParseException ex) {
-            Logger.getLogger(CompareFilesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(CompareFilesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }   
         
-        throw new RuntimeException("File Exception:\n" + exception.getMessage());
+        return null;
     }
     
     private CodeFile createDummyFile() {

@@ -56,7 +56,7 @@ public class UpdateClassesImpl implements UpdateClasses {
                     // Get all the files in this task that the specific user has worked on
                     List<CodeFile> allFiles = getAllFilesFromUser(taskClass.getAllFiles(), user.getUsername());
                     file.setVersion(allFiles.size() + 1);
-                    String newPath = createNewFile(file);
+                    //String newPath = createNewFile(file);
                     //file.setFilePath(newPath);
                     
                     // Add new created version of file to list of files for TaskClass

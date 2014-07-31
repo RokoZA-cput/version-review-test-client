@@ -37,7 +37,7 @@ public class ClassChanges implements ChangesStrategy {
         
         // Get Class Changes
         // Set strategy
-        checker = new CodeChecker(new CheckClass());
+        checker = new CodeChecker(new CheckClass());   
         
         ClassOrInterfaceDeclaration oldClass = (ClassOrInterfaceDeclaration) oldNode;
         ClassOrInterfaceDeclaration newClass = (ClassOrInterfaceDeclaration) newNode;
