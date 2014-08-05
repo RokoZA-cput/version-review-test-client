@@ -6,8 +6,8 @@
 
 package com.heinvdende.versionreview.test.client.services;
 
-import com.heinvdende.versionreview.test.client.domain.Task;
-import com.heinvdende.versionreview.test.client.domain.User;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
+import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import java.util.List;
 
 /**

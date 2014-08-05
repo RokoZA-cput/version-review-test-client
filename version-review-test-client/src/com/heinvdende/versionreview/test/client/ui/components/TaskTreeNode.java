@@ -6,7 +6,7 @@
 
 package com.heinvdende.versionreview.test.client.ui.components;
 
-import com.heinvdende.versionreview.test.client.domain.Task;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**

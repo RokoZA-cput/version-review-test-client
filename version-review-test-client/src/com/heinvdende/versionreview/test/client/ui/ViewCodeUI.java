@@ -6,16 +6,16 @@
 
 package com.heinvdende.versionreview.test.client.ui;
 
-import com.heinvdende.versionreview.test.client.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.client.domain.FileChange;
-import com.heinvdende.versionreview.test.client.domain.MainTask;
-import com.heinvdende.versionreview.test.client.domain.Project;
-import com.heinvdende.versionreview.test.client.domain.Task;
-import com.heinvdende.versionreview.test.client.domain.TaskClass;
-import com.heinvdende.versionreview.test.client.domain.User;
+import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
+import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
+import com.heinvdende.versionreview.test.modules.repository.domain.Project;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
+import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
+import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import com.heinvdende.versionreview.test.client.generate.GenObjects;
-import com.heinvdende.versionreview.test.client.services.filefunctions.CompareFilesService;
-import com.heinvdende.versionreview.test.client.services.filefunctions.impl.CompareFilesServiceImpl;
+import com.heinvdende.versionreview.test.modules.filefunctions.CompareFilesService;
+import com.heinvdende.versionreview.test.modules.filefunctions.impl.CompareFilesServiceImpl;
 import com.heinvdende.versionreview.test.client.ui.components.CustomComponents;
 import com.heinvdende.versionreview.test.client.ui.components.TaskTreeNode;
 import java.awt.event.MouseEvent;
@@ -72,8 +72,12 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
         treeTasks.setModel(new DefaultTreeModel(projectNode));
     }
     
+    // Logger Method
     private void print(String text) {
-        textAreaOutput.append("> " + text + "\n");
+        if(!text.equals(""))
+            textAreaOutput.append("> " + text + "\n");
+        else
+            textAreaOutput.append("\n");
     }
     
     private MainTask getCurrentTask() {
@@ -336,35 +340,35 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
 
     private void buttonOpenUserVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOpenUserVersionActionPerformed
         try
-            {
-                MainTask task = getCurrentTask();
-                if(task != null) {
-                    if(task.getClasses().size() > 0) {
-                        //panelFilesTab.removeAll();
+        {
+            MainTask task = getCurrentTask();
+            if(task != null) {
+                if(task.getClasses().size() > 0) {
+                    //panelFilesTab.removeAll();
 
-                        User user;
-                        ChangedCodeFile finalFile;
-                        for(TaskClass taskClass : task.getClasses()) {
-                            user = (User) listInvolvedUsers.getSelectedValue();
-                            finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
+                    User user;
+                    ChangedCodeFile finalFile;
+                    for(TaskClass taskClass : task.getClasses()) {
+                        user = (User) listInvolvedUsers.getSelectedValue();
+                        finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
 
-                            SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
-                            highlighter.setHighlightOnMouseOver(true);
-                            highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
-                            highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
-                            panelFilesTab.add(highlighter);
+                        SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
+                        highlighter.setHighlightOnMouseOver(true);
+                        highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
+                        highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
+                        panelFilesTab.add(highlighter);
 
-                        }
-
-                        panelFilesTab.setSelectedIndex(panelFilesTab.getTabCount()-1);
                     }
-                    else
-                        System.out.println("not classes");
+
+                    panelFilesTab.setSelectedIndex(panelFilesTab.getTabCount()-1);
                 }
+                else
+                    System.out.println("not classes");
             }
-            catch(Exception e) {
-                print(e.getMessage());
-            }
+        }
+        catch(Exception e) {
+            print(e.getMessage());
+        }
     }//GEN-LAST:event_buttonOpenUserVersionActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -513,15 +517,16 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
              
             List<FileChange> changeList = file.getChanges();
 
+            print("");
             for(FileChange change : changeList) {
                 if(change.getMarkerType() == FileChange.MARKER_HIGHLIGHT || change.getMarkerType() == FileChange.MARKER_UNDERLINE) {
-                    if(line >= change.getStartLine() && line <= change.getEndLine()) {
-                        print(change.getUser().getUsername() + " " + change.getType() + " this " + change.getMemberType() +".");
+                    if(line >= change.getMember().getStartLine() && line <= change.getMember().getEndLine()) {
+                        print(change.getUser().getUsername() + " " + change.getType() + " this " + change.getMember().getType() +".");
                     }
                 }
                 else if(change.getMarkerType() == FileChange.MARKER_NEW_FILE) {
-                    if(line == change.getStartLine()) {
-                        print(change.getUser().getUsername() + " " + change.getType() + " this " + change.getMemberType() +".");
+                    if(line == change.getMember().getStartLine()) {
+                        print(change.getUser().getUsername() + " " + change.getType() + " this " + change.getMember().getType() +".");
                     }
                 }
             }

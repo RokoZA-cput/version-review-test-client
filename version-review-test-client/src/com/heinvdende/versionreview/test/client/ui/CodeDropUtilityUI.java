@@ -6,20 +6,19 @@
 
 package com.heinvdende.versionreview.test.client.ui;
 
-import com.heinvdende.versionreview.test.client.domain.CodeFile;
-import com.heinvdende.versionreview.test.client.domain.MainTask;
-import com.heinvdende.versionreview.test.client.domain.Task;
-import com.heinvdende.versionreview.test.client.domain.User;
+import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
+import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import com.heinvdende.versionreview.test.client.generate.GenObjects;
-import com.heinvdende.versionreview.test.client.services.filefunctions.UpdateClasses;
-import com.heinvdende.versionreview.test.client.services.filefunctions.impl.UpdateClassesImpl;
-import com.sun.awt.AWTUtilities;
-import java.awt.GraphicsDevice;
+import com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes.MethodChanges;
+import com.heinvdende.versionreview.test.modules.filefunctions.UpdateClasses;
+import com.heinvdende.versionreview.test.modules.filefunctions.impl.UpdateClassesImpl;
+import japa.parser.ast.body.MethodDeclaration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.List;
-import javax.swing.DefaultListModel;
 import net.iharder.dnd.FileDrop;
 
 /**
@@ -132,6 +131,11 @@ public class CodeDropUtilityUI extends javax.swing.JFrame {
         buttonChangeProject.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         buttonChangeProject.setBorderPainted(false);
         buttonChangeProject.setFocusPainted(false);
+        buttonChangeProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonChangeProjectActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelContentLayout = new javax.swing.GroupLayout(panelContent);
         panelContent.setLayout(panelContentLayout);
@@ -238,6 +242,11 @@ public class CodeDropUtilityUI extends javax.swing.JFrame {
     private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed
         showTasks();
     }//GEN-LAST:event_comboBoxUsersActionPerformed
+
+    private void buttonChangeProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChangeProjectActionPerformed
+        MethodChanges mc = new MethodChanges();
+        mc.doCheck(null, new MethodDeclaration());
+    }//GEN-LAST:event_buttonChangeProjectActionPerformed
  
     /**
      * User Interface Methods

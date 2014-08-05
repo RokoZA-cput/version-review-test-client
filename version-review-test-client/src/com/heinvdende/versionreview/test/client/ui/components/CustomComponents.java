@@ -6,8 +6,8 @@
 
 package com.heinvdende.versionreview.test.client.ui.components;
 
-import com.heinvdende.versionreview.test.client.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.client.domain.FileChange;
+import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.client.services.LineNumber;
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -93,31 +93,13 @@ public class CustomComponents {
     
     private static void highlightAllText(List<LineNumber> lines, List<FileChange> changeList, SyntaxHighlighter highlighter) throws BadLocationException {
         for(FileChange c : changeList) {
-            for(int i=c.getStartLine();i<=c.getEndLine();i++) {
+            for(int i=c.getMember().getStartLine();i<=c.getMember().getEndLine();i++) {
                 if(c.getType().equals(FileChange.TYPE_ADD))
                     highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
                 else if(c.getType().equals(FileChange.TYPE_MOD))
                     highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), modPainter, c.getMarkerType());
                 else if(c.getType().equals(FileChange.TYPE_DEL))
                     highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), delPainter, c.getMarkerType());
-            }
-        }
-    }
-    
-    private static void highlightMethodHeaders(List<LineNumber> lines, List<FileChange> changeList, SyntaxHighlighter highlighter) throws BadLocationException {
-        int start = 0;
-        for(FileChange c : changeList) {
-            start = c.getStartLine();
-            
-            if(c.getType().equals(FileChange.TYPE_ADD))
-                highlightLine(lines, start, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
-            else if(c.getType().equals(FileChange.TYPE_MOD))
-                highlightLine(lines, start, highlighter.getHighlighter().getHighlighter(), modPainter, c.getMarkerType());
-            else if(c.getType().equals(FileChange.TYPE_DEL))
-                highlightLine(lines, start, highlighter.getHighlighter().getHighlighter(), delPainter, c.getMarkerType());
-            
-            for(int i=start+1;i<=c.getEndLine();i++) {
-                highlighter.addHighlightedLine(i);
             }
         }
     }

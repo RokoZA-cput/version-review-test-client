@@ -6,9 +6,9 @@
 
 package com.heinvdende.versionreview.test.client.generate;
 
-import com.heinvdende.versionreview.test.client.domain.MainTask;
-import com.heinvdende.versionreview.test.client.domain.Project;
-import com.heinvdende.versionreview.test.client.domain.User;
+import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
+import com.heinvdende.versionreview.test.modules.repository.domain.Project;
+import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -23,7 +23,7 @@ public class GenObjects {
     private static GenObjects instance;
     
     private Project purchaseProject;
-    private MainTask interfaceTask, calculateTask, vatTask;
+    private MainTask interfaceTask, calculateTask, vatTask, purchaseTask;
     private User johnUser, peterUser, steveUser;
     
     public User getUser(String user) {
@@ -49,7 +49,7 @@ public class GenObjects {
     }
     
     public List<MainTask> getTasks() {
-        return new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, vatTask));
+        return new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, vatTask, purchaseTask));
     }
     
     public MainTask getTask(String task) {
@@ -57,6 +57,7 @@ public class GenObjects {
             case "interface": return interfaceTask;
             case "calculate": return calculateTask;
             case "vat": return vatTask;
+            case "purchase": return purchaseTask;
         }
         
         return null;
@@ -67,6 +68,7 @@ public class GenObjects {
             case "interface": interfaceTask = task; break;
             case "calculate": calculateTask = task; break;
             case "vat": vatTask = task; break;
+            case "purchase": purchaseTask = task; break;
         }
     }
 
@@ -119,15 +121,23 @@ public class GenObjects {
         vatTask.setIsFinished(false);
         vatTask.setUsers(new ArrayList<>(Arrays.asList(steveUser)));
         
-        johnUser.setTasks(new ArrayList<>(Arrays.asList(interfaceTask, calculateTask)));
-        peterUser.setTasks(new ArrayList<>(Arrays.asList(interfaceTask)));
-        steveUser.setTasks(new ArrayList<>(Arrays.asList(vatTask)));
+        purchaseTask = new MainTask();
+        purchaseTask.setId(1);
+        purchaseTask.setName("Purchase");
+        purchaseTask.setDate(new Date());
+        purchaseTask.setDescription("Complete Purchase Project");
+        purchaseTask.setIsFinished(false);
+        purchaseTask.setUsers(new ArrayList<>(Arrays.asList(peterUser, johnUser, steveUser)));
+        
+        johnUser.setTasks(new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, purchaseTask)));
+        peterUser.setTasks(new ArrayList<>(Arrays.asList(interfaceTask, purchaseTask)));
+        steveUser.setTasks(new ArrayList<>(Arrays.asList(vatTask, purchaseTask)));
         
         purchaseProject = new Project();
         purchaseProject.setId(1);
         purchaseProject.setName("Purchase Project");
         purchaseProject.setDescription("Implementing purchasing functionality");
-        purchaseProject.setTasks(new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, vatTask)));
+        purchaseProject.setTasks(new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, vatTask, purchaseTask)));
     }
     
     public static GenObjects getInstance() {
