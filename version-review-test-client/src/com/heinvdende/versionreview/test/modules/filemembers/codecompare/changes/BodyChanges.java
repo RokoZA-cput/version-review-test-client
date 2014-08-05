@@ -55,6 +55,6 @@ public class BodyChanges extends MemberChangesStrategy {
 
     @Override
     public int getMarkerType() {
-        return FileChange.MARKER_NOT_USED;
+        return FileChange.MARKER_HIGHLIGHT;
     }
 }

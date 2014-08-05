@@ -63,7 +63,7 @@ public abstract class MembersVisitor {
     
     // This method creates the member from a node
     private Member visit(Node node, Member parentMember) {
-        Member member = FactoryFacade.getMemberFromNode(node, parentMember, file);    
+        Member member = FactoryFacade.getMemberFromNode(node, parentMember, null);    
         return member;
     }
 }

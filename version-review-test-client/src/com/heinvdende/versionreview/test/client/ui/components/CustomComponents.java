@@ -92,23 +92,41 @@ public class CustomComponents {
     }
     
     private static void highlightAllText(List<LineNumber> lines, List<FileChange> changeList, SyntaxHighlighter highlighter) throws BadLocationException {
-        for(FileChange c : changeList) {
-            for(int i=c.getMember().getStartLine();i<=c.getMember().getEndLine();i++) {
-                if(c.getType().equals(FileChange.TYPE_ADD))
-                    highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
-                else if(c.getType().equals(FileChange.TYPE_MOD))
-                    highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), modPainter, c.getMarkerType());
-                else if(c.getType().equals(FileChange.TYPE_DEL))
-                    highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), delPainter, c.getMarkerType());
+        List<LineNumber> tmpLines;
+        FileChange tmpChange;
+        Highlighter tmpHigh;
+        int tmpI;
+        
+        try {
+            for(FileChange c : changeList) {
+                for(int i=c.getMember().getStartLine();i<=c.getMember().getEndLine();i++) {
+                    
+                    tmpLines = lines;
+                    tmpChange = c;
+                    tmpHigh = highlighter.getHighlighter().getHighlighter();
+                    tmpI = i;
+                    
+                    if(c.getType().equals(FileChange.TYPE_ADD))
+                        highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
+                    else if(c.getType().equals(FileChange.TYPE_MOD))
+                        highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), modPainter, c.getMarkerType());
+                    else if(c.getType().equals(FileChange.TYPE_DEL))
+                        highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), delPainter, c.getMarkerType());
+                }
             }
+        }
+        catch(Exception e) {
+            System.out.println();
+            e.printStackTrace();
         }
     }
     
     private static void highlightLine(List<LineNumber> lines, int lineNum, Highlighter area, DefaultHighlightPainter paint, int markerType) throws BadLocationException {
         LineNumber line = getLine(lines, lineNum);
-        switch(markerType) {
-            case FileChange.MARKER_HIGHLIGHT: area.addHighlight(line.getStart(), line.getEnd(), paint);
-        }
+        area.addHighlight(line.getStart(), line.getEnd(), paint);
+        /*switch(markerType) {
+            case FileChange.MARKER_HIGHLIGHT: 
+        }*/
     }
     
     private static LineNumber getLine(List<LineNumber> lines, int lineNum) {

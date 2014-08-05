@@ -352,10 +352,18 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
                         user = (User) listInvolvedUsers.getSelectedValue();
                         finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
 
+                        /*SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
+                        highlighter.setHighlightOnMouseOver(true);
+                        highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
+                        highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
+                        panelFilesTab.add(highlighter);
+                        
+                        CompareFilesService service = new CompareFilesServiceImpl();*/
                         SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
                         highlighter.setHighlightOnMouseOver(true);
                         highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
                         highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
+                        
                         panelFilesTab.add(highlighter);
 
                     }
@@ -367,7 +375,7 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
             }
         }
         catch(Exception e) {
-            print(e.getMessage());
+            e.printStackTrace();
         }
     }//GEN-LAST:event_buttonOpenUserVersionActionPerformed
 
@@ -517,7 +525,6 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
              
             List<FileChange> changeList = file.getChanges();
 
-            print("");
             for(FileChange change : changeList) {
                 if(change.getMarkerType() == FileChange.MARKER_HIGHLIGHT || change.getMarkerType() == FileChange.MARKER_UNDERLINE) {
                     if(line >= change.getMember().getStartLine() && line <= change.getMember().getEndLine()) {
@@ -530,6 +537,7 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
                     }
                 }
             }
+            print("");
         }
 
         @Override
