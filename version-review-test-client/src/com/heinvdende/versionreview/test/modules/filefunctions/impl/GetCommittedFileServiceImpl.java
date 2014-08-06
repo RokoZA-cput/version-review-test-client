@@ -6,8 +6,6 @@
 
 package com.heinvdende.versionreview.test.modules.filefunctions.impl;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.filefunctions.GetCommittedFileService;
 import java.io.File;
 
@@ -36,7 +34,7 @@ public class GetCommittedFileServiceImpl implements GetCommittedFileService{
     
     @Override
     public String getFinalFile(String className) {
-        String classPath = "C:\\Users\\Heinrich\\Workspace\\purchase-test-app\\src\\com\\heinvdende\\test\\app\\purchase\\" + className;
+        String classPath = "C:\\Users\\Heinrich\\Workspace\\cput\\Purchase Test Apps\\purchase-test-app\\src\\com\\heinvdende\\test\\app\\purchase\\" + className;
         
         return classPath;
     }

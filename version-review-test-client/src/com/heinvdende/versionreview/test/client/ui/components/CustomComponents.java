@@ -106,8 +106,10 @@ public class CustomComponents {
     
     private static void highlightLine(List<LineNumber> lines, int lineNum, Highlighter area, DefaultHighlightPainter paint, int markerType) throws BadLocationException {
         LineNumber line = getLine(lines, lineNum);
-        switch(markerType) {
-            case FileChange.MARKER_HIGHLIGHT: area.addHighlight(line.getStart(), line.getEnd(), paint);
+        if(line != null) {
+            switch(markerType) {
+                case FileChange.MARKER_HIGHLIGHT: area.addHighlight(line.getStart(), line.getEnd(), paint);
+            }
         }
     }
     

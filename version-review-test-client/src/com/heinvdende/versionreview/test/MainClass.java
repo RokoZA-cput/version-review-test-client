@@ -8,10 +8,6 @@ package com.heinvdende.versionreview.test;
 
 import com.heinvdende.versionreview.test.client.ui.CodeDropUtilityUI;
 import com.heinvdende.versionreview.test.client.ui.ViewCodeUI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -21,7 +17,7 @@ public class MainClass {
     public static void main(String[] args) {
         
         new ViewCodeUI().setVisible(true);
-            new CodeDropUtilityUI().setVisible(true);
+        new CodeDropUtilityUI().setVisible(true);
         
         /*try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

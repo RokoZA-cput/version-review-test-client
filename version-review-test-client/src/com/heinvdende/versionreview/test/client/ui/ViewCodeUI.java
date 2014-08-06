@@ -350,14 +350,15 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
                     ChangedCodeFile finalFile;
                     for(TaskClass taskClass : task.getClasses()) {
                         user = (User) listInvolvedUsers.getSelectedValue();
-                        finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
+                        if(taskClass.getUserFinalFiles().containsKey(user)) {
+                            finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
 
-                        SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
-                        highlighter.setHighlightOnMouseOver(true);
-                        highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
-                        highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
-                        panelFilesTab.add(highlighter);
-
+                            SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(finalFile);
+                            highlighter.setHighlightOnMouseOver(true);
+                            highlighter.getHighlighter().addMouseListener(new ViewCodeUI.HighlightLineListener(highlighter.getHighlighter(), finalFile));
+                            highlighter.setName(highlighter.getName() + " (" + user.getUsername() + ")");
+                            panelFilesTab.add(highlighter);
+                        }
                     }
 
                     panelFilesTab.setSelectedIndex(panelFilesTab.getTabCount()-1);
@@ -367,7 +368,7 @@ public class ViewCodeUI extends JFrame implements TreeSelectionListener {
             }
         }
         catch(Exception e) {
-            print(e.getMessage());
+            e.printStackTrace();
         }
     }//GEN-LAST:event_buttonOpenUserVersionActionPerformed
 
