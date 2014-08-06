@@ -11,9 +11,7 @@ import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.modules.repository.domain.Member;
 import com.heinvdende.versionreview.test.modules.repository.domain.User;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
