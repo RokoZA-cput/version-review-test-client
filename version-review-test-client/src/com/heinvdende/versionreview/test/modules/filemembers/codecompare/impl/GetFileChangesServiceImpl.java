@@ -7,10 +7,9 @@
 package com.heinvdende.versionreview.test.modules.filemembers.codecompare.impl;
 
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.GetFileChangesService;
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes.ClassChanges;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

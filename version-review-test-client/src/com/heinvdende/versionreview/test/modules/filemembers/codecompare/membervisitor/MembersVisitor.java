@@ -6,10 +6,10 @@
 
 package com.heinvdende.versionreview.test.modules.filemembers.codecompare.membervisitor;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.Member;
 import com.heinvdende.versionreview.test.modules.filemembers.factory.FactoryFacade;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.strategy.StrategyChooser;
+import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
+import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import japa.parser.ast.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +39,11 @@ public abstract class MembersVisitor {
     public abstract boolean isInstanceOf(Node node);
     
     // This method will be called from the client
-    public List<Member> getMembers(Node currentNode, Member parentMember) {
-        List<Member> classMembers = new ArrayList<>();
+    public List<ClassMember> getMembers(Node currentNode, ClassMember parentMember) {
+        List<ClassMember> classMembers = new ArrayList<>();
 
         // Visit this member
-        Member currentMember = visit(currentNode, parentMember);
+        ClassMember currentMember = visit(currentNode, parentMember);
         classMembers.add(currentMember);
 
         // Get all children of the node
@@ -62,8 +62,8 @@ public abstract class MembersVisitor {
     }
     
     // This method creates the member from a node
-    private Member visit(Node node, Member parentMember) {
-        Member member = FactoryFacade.getMemberFromNode(node, parentMember, null);    
+    private ClassMember visit(Node node, ClassMember parentMember) {
+        ClassMember member = FactoryFacade.getMemberFromNode(node, parentMember, null);    
         return member;
     }
 }

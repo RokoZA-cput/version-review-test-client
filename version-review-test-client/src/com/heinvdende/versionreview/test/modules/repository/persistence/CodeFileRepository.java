@@ -4,15 +4,19 @@
  * and open the template in the editor.
  */
 
-package com.heinvdende.versionreview.test.modules.filefunctions;
+package com.heinvdende.versionreview.test.modules.repository.persistence;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
 
 /**
  *
  * @author Heinrich
  */
-public interface UpdateClasses {
-    public MainTask addClass(CodeFile file, MainTask task);
+public class CodeFileRepository extends AbstractRepository<CodeFile, Long> {
+
+    @Override
+    public Class getEntityClass() {
+        return CodeFile.class;
+    }
+    
 }

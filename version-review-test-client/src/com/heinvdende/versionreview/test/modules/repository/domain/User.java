@@ -6,23 +6,66 @@
 
 package com.heinvdende.versionreview.test.modules.repository.domain;
 
+import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Heinrich
  */
-public class User {
-    private long id;
+@Entity
+@Table(name = "USERS")
+@XmlRootElement
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    
+    @Size(max = 20)
+    @Column(name = "USERNAME")
     private String username;
+    
+    @Size(max = 20)
+    @Column(name = "PASSWORD")
     private String password;
-    private List<Task> tasks;
+    
+    @ManyToMany(mappedBy = "userList")
+    private List<Task> taskList;
+    
+    @OneToMany(mappedBy = "user")
+    private List<CodeFile> codeFileList;
 
-    public long getId() {
+    @OneToMany(mappedBy = "user")
+    private List<FileChange> fileChangeList;
+
+    public User() {
+    }
+
+    public User(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -42,18 +85,56 @@ public class User {
         this.password = password;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    @XmlTransient
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
+    }
+
+    @XmlTransient
+    public List<CodeFile> getCodeFileList() {
+        return codeFileList;
+    }
+
+    public void setCodeFileList(List<CodeFile> codeFileList) {
+        this.codeFileList = codeFileList;
+    }
+
+    @XmlTransient
+    public List<FileChange> getFileChangeList() {
+        return fileChangeList;
+    }
+
+    public void setFileChangeList(List<FileChange> fileChangeList) {
+        this.fileChangeList = fileChangeList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof User)) {
+            return false;
+        }
+        User other = (User) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return this.username;
+        return "com.heinvdende.versionreview.test.modules.repository.domain.entities.User[ id=" + id + " ]";
     }
-    
     
 }

@@ -7,13 +7,13 @@
 package com.heinvdende.versionreview.test.modules.filefunctions.impl;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
-import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
-import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import com.heinvdende.versionreview.test.modules.filefunctions.CompareFilesService;
 import com.heinvdende.versionreview.test.modules.filefunctions.UpdateClasses;
+import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
+import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
+import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,13 +54,13 @@ public class UpdateClassesImpl implements UpdateClasses {
                 if(taskClass.getUserFinalFiles().containsKey(user)) {
                     
                     // Get all the files in this task that the specific user has worked on
-                    List<CodeFile> allFiles = getAllFilesFromUser(taskClass.getAllFiles(), user.getUsername());
+                    List<CodeFile> allFiles = getAllFilesFromUser(taskClass.getCodeFileList(), user.getUsername());
                     file.setVersion(allFiles.size() + 1);
                     //String newPath = createNewFile(file);
                     //file.setFilePath(newPath);
                     
                     // Add new created version of file to list of files for TaskClass
-                    taskClass.getAllFiles().add(file);
+                    taskClass.getCodeFileList().add(file);
 
                     try {
                         
@@ -94,14 +94,14 @@ public class UpdateClassesImpl implements UpdateClasses {
                 newTaskClass.setClassName(name);
                 
                 // Compare files and retrieve a ChangedJavaFile
-                ChangedCodeFile finalFile = getFinalMergedFile(file, newTaskClass, user);
+                ChangedCodeFile finalFile = getFinalMergedFile(file, newTaskClass, user); 
                 
                 newTaskClass.getUserFinalFiles().put(user, finalFile);
 
                 List<CodeFile> newFileList = new ArrayList<>();
                 newFileList.add(file);
 
-                newTaskClass.setAllFiles(newFileList);
+                newTaskClass.setCodeFileList(newFileList);
 
                 task.getClasses().add(newTaskClass);
             }
@@ -111,7 +111,7 @@ public class UpdateClassesImpl implements UpdateClasses {
                     if(name.equals(taskClass.getClassName())) {
                         ChangedCodeFile finalFile = getFinalMergedFile(file, taskClass, user);
                         taskClass.getUserFinalFiles().put(user, finalFile);
-                        taskClass.getAllFiles().add(file);
+                        taskClass.getCodeFileList().add(file);
                     }
                 }
             }
@@ -120,11 +120,18 @@ public class UpdateClassesImpl implements UpdateClasses {
         return task;
     }
     
+    private void assignUserToChanges(List<FileChange> changes, User user) {
+        for(FileChange c : changes) { 
+            c.setUser(user);
+        }
+    }
+    
     private ChangedCodeFile getFinalMergedFile(CodeFile file, TaskClass taskClass, User user) {
         try {
             // Compare files and retrieve a ChangedJavaFile
             CompareFilesService service = new CompareFilesServiceImpl();
             ChangedCodeFile newFile = service.getVersionChanged(file);
+            assignUserToChanges(newFile.getChanges(), user);
             
             // Before setting final file, the ChangedFile retrieved from getVersionChanged() will require all the old changes aswell,
             // because it will compare the new file to the committed version, therefore changes that has already been checked will not be included.

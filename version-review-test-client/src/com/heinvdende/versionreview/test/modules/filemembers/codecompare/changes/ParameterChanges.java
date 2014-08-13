@@ -6,8 +6,8 @@
 
 package com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.childmembers.ParameterChildrenService;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import japa.parser.ast.Node;
 import japa.parser.ast.body.Parameter;
 import java.util.List;

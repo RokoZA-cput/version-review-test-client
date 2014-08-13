@@ -7,10 +7,6 @@
 package com.heinvdende.versionreview.test.modules.filefunctions.impl;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.Member;
-import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
 import com.heinvdende.versionreview.test.modules.filefunctions.visitor.ClassVisitor;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.GetFileChangesService;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.impl.GetFileChangesServiceImpl;
@@ -19,6 +15,10 @@ import com.heinvdende.versionreview.test.modules.filefunctions.GetCommittedFileS
 import com.heinvdende.versionreview.test.modules.filefunctions.memberchanges.FindMemberChangesService;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.membervisitor.ClassMembersVisitor;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.membervisitor.MembersVisitor;
+import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
+import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
+import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
@@ -55,7 +55,7 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         ClassOrInterfaceDeclaration classNode = getClassDeclarations(finalFilePath);
         
         MembersVisitor visitor = new ClassMembersVisitor(file);
-        List<Member> members = visitor.getMembers(classNode, null); // Null as parent, because a class is the root node
+        List<ClassMember> members = visitor.getMembers(classNode, null); // Null as parent, because a class is the root node
         
         // Get file changes
         FindMemberChangesService changesService = new FindMemberChangesService();
@@ -63,7 +63,7 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         
         // Set values
         file.setFilePath(finalFilePath);
-        file.setMembers(members);
+        file.setClassMemberList(members);
         file.setChanges(fileChanges);
         
         task.setFinalFile(file);
@@ -101,6 +101,7 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         ChangedCodeFile file = new ChangedCodeFile();
         file.setFilePath(newVersion.getFilePath());
         file.setVersion(newVersion.getVersion());
+        
         file.setChanges(getChanges(oldVersion, newVersion));
         return file;
     }

@@ -6,8 +6,8 @@
 
 package com.heinvdende.versionreview.test.modules.filemembers.codecompare.membervisitor;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.childmembers.MethodChildrenService;
+import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import japa.parser.ast.Node;
 import japa.parser.ast.body.MethodDeclaration;
 import java.util.List;

@@ -25,14 +25,14 @@ import net.iharder.dnd.FileDrop;
  *
  * @author Heinrich
  */
-public class CodeDropUtilityUI extends javax.swing.JFrame {
+public class UICodeDropUtility extends javax.swing.JFrame {
 
     private boolean mIsMinimized = false;
     
     /**
      * Creates new form CodeDropUtilityUI
      */
-    public CodeDropUtilityUI() {
+    public UICodeDropUtility() {
         initComponents();
         positionBottomRight();
         addDropFunctionality();
@@ -255,7 +255,7 @@ public class CodeDropUtilityUI extends javax.swing.JFrame {
         String userStr = comboBoxUsers.getSelectedItem().toString();
         User user = GenObjects.getInstance().getUser(userStr);
         
-        List<Task> taskList = user.getTasks();
+        List<Task> taskList = user.getTaskList();
 
         comboBoxTasks.removeAllItems();
         for(Task task : taskList) {

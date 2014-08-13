@@ -7,13 +7,12 @@
 package com.heinvdende.versionreview.test.client.ui.components;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.client.services.LineNumber;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
-import static java.nio.file.Files.lines;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JScrollPane;
@@ -21,7 +20,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter;
 import syntaxhighlight.SyntaxHighlighter;
-import syntaxhighlight.SyntaxHighlighterPane;
 import syntaxhighlighter.SyntaxHighlighterParser;
 import syntaxhighlighter.brush.BrushJava;
 import syntaxhighlighter.brush.BrushXml;
@@ -91,23 +89,16 @@ public class CustomComponents {
         return highlighter; 
     }
     
+    private static List<Integer> addedLines;
     private static void highlightAllText(List<LineNumber> lines, List<FileChange> changeList, SyntaxHighlighter highlighter) throws BadLocationException {
-        List<LineNumber> tmpLines;
-        FileChange tmpChange;
-        Highlighter tmpHigh;
-        int tmpI;
-        
-        try {
-            for(FileChange c : changeList) {
-                for(int i=c.getMember().getStartLine();i<=c.getMember().getEndLine();i++) {
-                    
-                    tmpLines = lines;
-                    tmpChange = c;
-                    tmpHigh = highlighter.getHighlighter().getHighlighter();
-                    tmpI = i;
-                    
-                    if(c.getType().equals(FileChange.TYPE_ADD))
-                        highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
+        addedLines = new ArrayList<>();
+        for(FileChange c : changeList) {
+            if(c.getMarkerType() == FileChange.MARKER_HIGHLIGHT) {
+                for(int i=c.getClassMember().getStartLine();i<=c.getClassMember().getEndLine();i++) {
+                    if(c.getType().equals(FileChange.TYPE_ADD)) {
+                        if(!addedLines.contains(i))
+                            highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), addPainter, c.getMarkerType());
+                    }
                     else if(c.getType().equals(FileChange.TYPE_MOD))
                         highlightLine(lines, i, highlighter.getHighlighter().getHighlighter(), modPainter, c.getMarkerType());
                     else if(c.getType().equals(FileChange.TYPE_DEL))
@@ -115,18 +106,17 @@ public class CustomComponents {
                 }
             }
         }
-        catch(Exception e) {
-            System.out.println();
-            e.printStackTrace();
-        }
     }
     
     private static void highlightLine(List<LineNumber> lines, int lineNum, Highlighter area, DefaultHighlightPainter paint, int markerType) throws BadLocationException {
         LineNumber line = getLine(lines, lineNum);
-        area.addHighlight(line.getStart(), line.getEnd(), paint);
-        /*switch(markerType) {
-            case FileChange.MARKER_HIGHLIGHT: 
-        }*/
+        if(line != null) {
+            switch(markerType) {
+                case FileChange.MARKER_HIGHLIGHT: 
+                    area.addHighlight(line.getStart(), line.getEnd(), paint);
+                    addedLines.add(lineNum);
+            }
+        }
     }
     
     private static LineNumber getLine(List<LineNumber> lines, int lineNum) {

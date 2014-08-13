@@ -6,11 +6,11 @@
 
 package com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
-import com.heinvdende.versionreview.test.modules.repository.domain.Member;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.strategy.StrategyChooser;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.compare.CompareStrategy;
 import com.heinvdende.versionreview.test.modules.filemembers.factory.FactoryFacade;
+import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import japa.parser.ast.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public abstract class MemberChangesStrategy {
     }
     
     // This method will be called if there should be a parent node
-    public List<FileChange> doCheck(Node oldNode, Node newNode, Member parentMember) {
+    public List<FileChange> doCheck(Node oldNode, Node newNode, ClassMember parentMember) {
         List<FileChange> list = new ArrayList<>();
         
         // Check for correct types
@@ -48,7 +48,7 @@ public abstract class MemberChangesStrategy {
         // Get Compare Strategy
         CompareStrategy strat = StrategyChooser.getCompareStrategy(newNode);
         // Create member from node
-        Member currentMember = FactoryFacade.getMemberFromNode(newNode, parentMember, null); 
+        ClassMember currentMember = FactoryFacade.getMemberFromNode(newNode, parentMember, null); 
         
         if(oldNode == null) {
             list.add(visit(currentMember, FileChange.TYPE_ADD));
@@ -79,11 +79,11 @@ public abstract class MemberChangesStrategy {
         return list;
     } 
     
-    private FileChange visit(Member member, String type) {
+    private FileChange visit(ClassMember member, String type) {
         return FactoryFacade.getFileChange(member, type, getMarkerType());
     }
     
-    private List<FileChange> getMemberListChanges(List<? extends Node> oldMembers, List<? extends Node> newMembers, Member parentMember) {
+    private List<FileChange> getMemberListChanges(List<? extends Node> oldMembers, List<? extends Node> newMembers, ClassMember parentMember) {
         List<FileChange> list = new ArrayList<>();
         
         // Check for any nodes in the new list

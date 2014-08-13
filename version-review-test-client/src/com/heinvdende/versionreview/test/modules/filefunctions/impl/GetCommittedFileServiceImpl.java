@@ -6,8 +6,6 @@
 
 package com.heinvdende.versionreview.test.modules.filefunctions.impl;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.filefunctions.GetCommittedFileService;
 import java.io.File;
 

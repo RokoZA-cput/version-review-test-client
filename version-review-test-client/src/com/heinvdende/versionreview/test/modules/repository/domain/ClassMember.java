@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Heinrich
  */
 @Entity
-@Table(name = "CODEFILES")
+@Table(name = "MEMBERS")
 @XmlRootElement
-public class CodeFile implements Serializable {
+public class ClassMember implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -40,29 +40,52 @@ public class CodeFile implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     
-    @Size(max = 500)
-    @Column(name = "FILEPATH")
-    private String filePath;
+    @Column(name = "STARTLINE")
+    private Integer startLine;
     
-    @Column(name = "VERSION")
-    private Integer version;
+    @Column(name = "ENDLINE")
+    private Integer endLine;
     
-    @JoinColumn(name = "TASKCLASSID", referencedColumnName = "ID")
-    @ManyToOne
-    private TaskClass taskClass;
+    @Size(max = 20)
+    @Column(name = "TYPE")
+    private String type;
     
-    @JoinColumn(name = "USERID", referencedColumnName = "ID")
-    @ManyToOne
-    private User user;
+    @Size(max = 30)
+    @Column(name = "MEMBERHEADER")
+    private String memberHeader;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codeFile")
+    @OneToMany(cascade=CascadeType.PERSIST, mappedBy = "classMember")
     private List<ClassMember> classMemberList;
+    
+    @JoinColumn(name = "PARENTMEMBERID", referencedColumnName = "ID")
+    @ManyToOne
+    private ClassMember classMember;
+    
+    @JoinColumn(name = "CODEFILEID", referencedColumnName = "ID")
+    @ManyToOne
+    private CodeFile codeFile;
 
-    public CodeFile() {
+    public ClassMember() {
     }
 
-    public CodeFile(Integer id) {
+    public ClassMember(Integer id) {
         this.id = id;
+    }
+
+    public ClassMember getParentMember() {
+        return classMember;
+    }
+
+    public void setParentMember(ClassMember parentMember) {
+        this.classMember = parentMember;
+    }
+
+    public CodeFile getCodeFile() {
+        return codeFile;
+    }
+
+    public void setCodeFile(CodeFile codeFile) {
+        this.codeFile = codeFile;
     }
 
     public Integer getId() {
@@ -73,36 +96,36 @@ public class CodeFile implements Serializable {
         this.id = id;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public Integer getStartLine() {
+        return startLine;
     }
 
-    public void setFilePath(String filepath) {
-        this.filePath = filepath;
+    public void setStartLine(Integer startline) {
+        this.startLine = startline;
     }
 
-    public Integer getVersion() {
-        return version;
+    public Integer getEndLine() {
+        return endLine;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setEndLine(Integer endline) {
+        this.endLine = endline;
     }
 
-    public TaskClass getTaskClass() {
-        return taskClass;
+    public String getType() {
+        return type;
     }
 
-    public void setTaskClass(TaskClass taskClass) {
-        this.taskClass = taskClass;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public String getMemberHeader() {
+        return memberHeader;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setMemberHeader(String memberheader) {
+        this.memberHeader = memberheader;
     }
 
     @XmlTransient
@@ -113,7 +136,7 @@ public class CodeFile implements Serializable {
     public void setClassMemberList(List<ClassMember> classMemberList) {
         this.classMemberList = classMemberList;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -124,10 +147,10 @@ public class CodeFile implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CodeFile)) {
+        if (!(object instanceof ClassMember)) {
             return false;
         }
-        CodeFile other = (CodeFile) object;
+        ClassMember other = (ClassMember) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -136,7 +159,7 @@ public class CodeFile implements Serializable {
 
     @Override
     public String toString() {
-        return "com.heinvdende.versionreview.test.modules.repository.domain.entities.CodeFile[ id=" + id + " ]";
+        return "com.heinvdende.versionreview.test.modules.repository.domain.ClassMember[ id=" + id + " ]";
     }
     
 }

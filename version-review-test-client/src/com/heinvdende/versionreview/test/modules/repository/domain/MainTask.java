@@ -14,17 +14,8 @@ import java.util.List;
  * @author Heinrich
  */
 public class MainTask extends Task {
-    private List<SubTask> subTasks = new ArrayList<>();
     private List<TaskClass> classes = new ArrayList<>();
     private List<User> users = new ArrayList<>();
-
-    public List<SubTask> getSubTasks() {
-        return subTasks;
-    }
-
-    public void setSubTasks(List<SubTask> subTasks) {
-        this.subTasks = subTasks;
-    }
 
     public List<TaskClass> getClasses() {
         return classes;
