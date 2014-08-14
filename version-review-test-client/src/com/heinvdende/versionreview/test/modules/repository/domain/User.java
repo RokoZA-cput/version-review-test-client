@@ -7,15 +7,15 @@
 package com.heinvdende.versionreview.test.modules.repository.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -45,8 +45,8 @@ public class User implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
     
-    @ManyToMany(mappedBy = "userList")
-    private List<Task> taskList;
+    @ManyToMany(mappedBy = "userList", cascade = CascadeType.MERGE)
+    private List<Task> taskList = new ArrayList<>();
     
     @OneToMany(mappedBy = "user")
     private List<CodeFile> codeFileList;
@@ -103,6 +103,16 @@ public class User implements Serializable {
         this.codeFileList = codeFileList;
     }
 
+    public void addTask(Task task) {
+        this.getTaskList().add(task);
+        task.getUserList().add(this);
+    }
+    
+    public void removeTask(Task task) {
+        this.getTaskList().remove(task);
+        task.getUserList().remove(this);
+    }
+    
     @XmlTransient
     public List<FileChange> getFileChangeList() {
         return fileChangeList;

@@ -12,7 +12,7 @@ import com.heinvdende.versionreview.test.modules.repository.domain.User;
  *
  * @author Heinrich
  */
-public class UserRepository extends AbstractRepository<User, Long> {
+public class UserRepository extends AbstractRepository<User, Integer> {
 
     @Override
     public Class getEntityClass() {

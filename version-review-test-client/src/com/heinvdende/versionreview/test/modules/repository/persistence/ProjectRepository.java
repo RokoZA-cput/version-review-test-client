@@ -12,8 +12,12 @@ import com.heinvdende.versionreview.test.modules.repository.domain.Project;
  *
  * @author Heinrich
  */
-public class ProjectRepository extends AbstractRepository<Project, Long> {
+public class ProjectRepository extends AbstractRepository<Project, Integer> {
 
+    public ProjectRepository() {
+        super();
+    }
+    
     @Override
     public Class getEntityClass() {
         return Project.class;

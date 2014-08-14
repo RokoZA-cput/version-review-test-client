@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="version-review-test-client">
+    <test name="Version Review Repository Test Suite">
+        <packages>
+            <package name="com.heinvdende.versionreview.tests.module.repository.persistence"/>
+        </packages>
+    </test>
+
+</suite>

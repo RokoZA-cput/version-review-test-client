@@ -7,6 +7,7 @@
 package com.heinvdende.versionreview.test.modules.repository.domain;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;

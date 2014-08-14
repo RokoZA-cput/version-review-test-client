@@ -12,7 +12,7 @@ import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
  *
  * @author Heinrich
  */
-public class FileChangeRepository extends AbstractRepository<FileChange, Long> {
+public class FileChangeRepository extends AbstractRepository<FileChange, Integer> {
 
     @Override
     public Class getEntityClass() {

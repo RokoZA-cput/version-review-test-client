@@ -6,141 +6,83 @@
 
 package com.heinvdende.versionreview.test.modules.repository.persistence;
 
-import com.heinvdende.versionreview.test.modules.repository.persistence.constants.PersistenceConstants;
+import java.io.Serializable;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
+import org.hibernate.Criteria;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 
 /**
  *
  * @author Heinrich
  */
-public abstract class AbstractRepository<T, S> {
+public abstract class AbstractRepository<T, ID extends Serializable> {
 
-    private Class entityClass;
-    
-    @PersistenceUnit
-    private EntityManagerFactory emf;
+    private Session session;
     
     public AbstractRepository() {
-        entityClass = getEntityClass();
     }
     
     public abstract Class getEntityClass();
     
-    public T getEntity(S id) {
-        emf = Persistence.createEntityManagerFactory(PersistenceConstants.PERSISTENCE_UNIT);
-        EntityManager em = emf.createEntityManager();
-        
+    public void setSession(Session session) {
+        this.session = session;
+    }
+    
+    public Session getSession() {
+        return session;
+    }
+    
+    public void flush() {
+        getSession().flush();
+    }
+    
+    public T getEntity(ID id) {
         T entity = null;
-
+        
         try {
-            em.getTransaction().begin();
-            entity = (T) em.find(entityClass, id);
-            em.getTransaction().commit();
+            entity = (T) session.load(getEntityClass(), id);
         }
-        catch(Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
+        catch(ObjectNotFoundException e) {
+            System.out.println("Entity Not Found");
         }
-        finally {
-            em.close();
-            emf.close();
-        }
-
         
         return entity;
     }
 
     public List<T> getEntities() {
-        emf = Persistence.createEntityManagerFactory(PersistenceConstants.PERSISTENCE_UNIT);
-        EntityManager em = emf.createEntityManager();
+        List<T> list = null;
         
-        List<T> entities = null;
-
         try {
-            em.getTransaction().begin();
-            entities = em.createQuery("SELECT u FROM Users u").getResultList();
-            em.getTransaction().commit();
+            list = findByCriteria();
         }
-        catch(Exception e) {
-            em.getTransaction().rollback();
-            e.printStackTrace();
+        catch(ObjectNotFoundException e) {
+            System.out.println("Entity Not Found");
         }
-        finally {
-            em.close();
-            emf.close();
-        }
-
         
-        return entities;
+        return list;
     }
 
-    public T createEntity(T entity) {    
-        emf = Persistence.createEntityManagerFactory(PersistenceConstants.PERSISTENCE_UNIT);
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            em.persist(entity);
-            em.flush();
-            em.getTransaction().commit();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        }
-        finally {
-            em.close();
-            emf.close();
-        }
-
-        
-        return entity;
+    public T createEntity(T entity) { 
+        session.saveOrUpdate(entity);  
+        return entity; 
     }
 
     public T updateEntity(T entity) {
-        emf = Persistence.createEntityManagerFactory(PersistenceConstants.PERSISTENCE_UNIT);
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            em.merge(entity);
-            em.flush();
-            em.getTransaction().commit();  
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback(); 
-        }
-        finally {
-            em.close();
-            emf.close();
-        }
-
-        
+        session.merge(entity);
         return entity;
     }
 
-    public void removeEntity(S id) {
-        emf = Persistence.createEntityManagerFactory(PersistenceConstants.PERSISTENCE_UNIT);
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            em.remove(id);
-            em.getTransaction().commit();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        }
-        finally {
-            em.close();
-            emf.close();
-        }
+    public void removeEntity(T entity) {
+        session.delete(entity);
     }
-
+    
+    protected List<T> findByCriteria(Criterion... criterion) {  
+        Criteria crit = getSession().createCriteria(getEntityClass());  
+        for (Criterion c : criterion) {  
+            crit.add(c);  
+        }  
+        return crit.list();  
+   }
 }

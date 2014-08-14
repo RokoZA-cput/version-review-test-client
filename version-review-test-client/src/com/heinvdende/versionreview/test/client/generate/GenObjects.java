@@ -124,7 +124,7 @@ public class GenObjects {
         purchaseTask.setDate(new Date());
         purchaseTask.setDescription("Complete Purchase Project");
         purchaseTask.setIsFinished(false);
-        purchaseTask.setUsers(new ArrayList<>(Arrays.asList(peterUser, johnUser, steveUser)));
+        purchaseTask.setUserList(new ArrayList<>(Arrays.asList(peterUser, johnUser, steveUser)));
         
         johnUser.setTaskList(new ArrayList<>(Arrays.asList(interfaceTask, calculateTask, purchaseTask)));
         peterUser.setTaskList(new ArrayList<>(Arrays.asList(interfaceTask, purchaseTask)));

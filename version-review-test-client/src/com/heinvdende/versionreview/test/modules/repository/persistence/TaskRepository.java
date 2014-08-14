@@ -12,7 +12,7 @@ import com.heinvdende.versionreview.test.modules.repository.domain.Task;
  *
  * @author Heinrich
  */
-public class TaskRepository extends AbstractRepository<Task, Long> {
+public class TaskRepository extends AbstractRepository<Task, Integer> {
 
     @Override
     public Class getEntityClass() {

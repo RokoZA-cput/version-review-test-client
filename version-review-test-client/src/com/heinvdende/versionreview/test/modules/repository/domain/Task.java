@@ -14,6 +14,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,12 +71,12 @@ public class Task implements Serializable {
     @ManyToOne
     private Project project;
     
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "task")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "parentTask")
     private List<Task> subTasks;
     
     @JoinColumn(name = "PARENTTASKID", referencedColumnName = "ID")
     @ManyToOne
-    private Task task;
+    private Task parentTask;
     
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "task")
     private List<TaskClass> taskClassList;
@@ -127,6 +128,16 @@ public class Task implements Serializable {
         this.isFinished = isfinished;
     }
 
+    public void addUser(User user) {
+        this.getUserList().add(user);
+        user.getTaskList().add(this);
+    }
+    
+    public void removeUser(User user) {
+        this.getUserList().remove(user);
+        user.getTaskList().remove(this);
+    }
+    
     @XmlTransient
     public List<User> getUserList() {
         return userList;
@@ -152,12 +163,12 @@ public class Task implements Serializable {
         this.subTasks = subTasks;
     }
 
-    public Task getTask() {
-        return task;
+    public Task getParentTask() {
+        return parentTask;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setParentTask(Task task) {
+        this.parentTask = task;
     }
 
     @XmlTransient
