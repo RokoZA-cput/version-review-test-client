@@ -13,10 +13,4 @@ import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
  * @author Heinrich
  */
 public class CodeFileRepository extends AbstractRepository<CodeFile, Integer> {
-
-    @Override
-    public Class getEntityClass() {
-        return CodeFile.class;
-    }
-    
 }

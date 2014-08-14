@@ -78,7 +78,7 @@ public class ProjectRepositoryTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        repoFactory.commit();
+        repo.commit();
     }
 
     @BeforeMethod

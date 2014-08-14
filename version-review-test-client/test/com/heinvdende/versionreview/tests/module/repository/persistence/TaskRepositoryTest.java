@@ -6,9 +6,7 @@
 
 package com.heinvdende.versionreview.tests.module.repository.persistence;
 
-import com.heinvdende.versionreview.test.modules.repository.domain.Project;
 import com.heinvdende.versionreview.test.modules.repository.domain.Task;
-import com.heinvdende.versionreview.test.modules.repository.persistence.ProjectRepository;
 import com.heinvdende.versionreview.test.modules.repository.persistence.TaskRepository;
 import com.heinvdende.versionreview.test.modules.repository.persistence.factory.RepositoryFactory;
 import java.util.Date;
@@ -83,7 +81,7 @@ public class TaskRepositoryTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        repoFactory.commit();
+        repo.commit();
     }
 
     @BeforeMethod

@@ -6,11 +6,14 @@
 
 package com.heinvdende.versionreview.test.modules.repository.persistence;
 
+import com.heinvdende.versionreview.test.modules.repository.persistence.hibernate.HibernateUtil;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 
 /**
@@ -19,25 +22,13 @@ import org.hibernate.criterion.Criterion;
  */
 public abstract class AbstractRepository<T, ID extends Serializable> {
 
+    private Transaction transaction;
     private Session session;
     
     public AbstractRepository() {
     }
-    
-    public abstract Class getEntityClass();
-    
-    public void setSession(Session session) {
-        this.session = session;
-    }
-    
-    public Session getSession() {
-        return session;
-    }
-    
-    public void flush() {
-        getSession().flush();
-    }
-    
+            
+    // DAO Methods
     public T getEntity(ID id) {
         T entity = null;
         
@@ -84,5 +75,52 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
             crit.add(c);  
         }  
         return crit.list();  
-   }
+    }
+    
+    public Class getEntityClass() {
+        return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]; 
+    }
+    
+    // Commit Transaction & End Session
+    public void commit() {
+        try {
+            getTransaction().commit();
+        }
+        catch(RuntimeException e) {
+            System.out.println(e.getStackTrace());
+            getTransaction().rollback();  
+        }  
+        finally {  
+            getSession().close();  
+        }
+    }
+    
+    // Session & Transaction Methods
+    public Session getSession() {
+        if(session == null) 
+            throw new IllegalStateException("Session has not been opened");
+            
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+    
+    public void setTransaction(Transaction t) {
+        this.transaction = t;
+    }
+    
+    public Transaction getTransaction() {
+        return this.transaction;
+    }
+    
+    // Creates Hibernet Session
+    public void openSession() {
+        setSession(HibernateUtil.getSessionFactory().openSession());
+    }
+    
+    public void flush() {
+        getSession().flush();
+    }
 }

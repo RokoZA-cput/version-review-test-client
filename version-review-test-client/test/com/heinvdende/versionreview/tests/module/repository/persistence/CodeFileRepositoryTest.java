@@ -105,7 +105,8 @@ public class CodeFileRepositoryTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        repoFactory.commit();
+        repo.commit();
+        memberRepo.commit();
     }
 
     @BeforeMethod

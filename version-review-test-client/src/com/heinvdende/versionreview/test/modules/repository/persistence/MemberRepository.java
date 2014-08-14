@@ -13,10 +13,4 @@ import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
  * @author Heinrich
  */
 public class MemberRepository extends AbstractRepository<ClassMember, Integer> {
-
-    @Override
-    public Class getEntityClass() {
-        return ClassMember.class;
-    }
-    
 }

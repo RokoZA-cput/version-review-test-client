@@ -25,8 +25,7 @@ import org.testng.annotations.Test;
  */
 public class UserRepositoryTest {
     
-    private static RepositoryFactory repoFactory;
-    private static RepositoryFactory taskFactory;
+    private static RepositoryFactory repo;
     private static UserRepository userRepo;
     private static TaskRepository taskRepo;
 
@@ -63,7 +62,7 @@ public class UserRepositoryTest {
         
         Assert.assertNotNull(newTask.getId());
         
-        taskFactory.commit();
+        taskRepo.commit();
         userRepo.flush();
     }
 
@@ -96,7 +95,7 @@ public class UserRepositoryTest {
         Assert.assertNull(user);
         
         // Check if Task still exists
-        taskRepo = repoFactory.getTaskRepository();
+        taskRepo = repo.getTaskRepository();
         Task task = taskRepo.getEntity(newTask.getId());
         
         Assert.assertNotNull(task);
@@ -106,16 +105,15 @@ public class UserRepositoryTest {
     
     @BeforeClass
     public static void setUpClass() throws Exception {
-        repoFactory = new RepositoryFactory();
-        taskFactory = new RepositoryFactory();
-        userRepo = repoFactory.getUserRepository();
-        taskRepo = taskFactory.getTaskRepository();
+        repo = new RepositoryFactory();
+        userRepo = repo.getUserRepository();
+        taskRepo = repo.getTaskRepository();
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        repoFactory.commit();
-        
+        userRepo.commit();
+        taskRepo.commit();
     }
 
     @BeforeMethod

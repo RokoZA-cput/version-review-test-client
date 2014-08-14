@@ -13,10 +13,5 @@ import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
  * @author Heinrich
  */
 public class TaskClassRepository extends AbstractRepository<TaskClass, Integer> {
-
-    @Override
-    public Class getEntityClass() {
-        return TaskClass.class;
-    }
     
 }
