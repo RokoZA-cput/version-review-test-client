@@ -7,12 +7,12 @@
 package com.heinvdende.versionreview.test.client.ui;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
 import com.heinvdende.versionreview.test.modules.repository.domain.Project;
 import com.heinvdende.versionreview.test.modules.repository.domain.Task;
 import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
 import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import com.heinvdende.versionreview.test.client.generate.GenObjects;
+import com.heinvdende.versionreview.test.client.ui.components.CodeViewPanel;
 import com.heinvdende.versionreview.test.modules.filefunctions.CompareFilesService;
 import com.heinvdende.versionreview.test.modules.filefunctions.impl.CompareFilesServiceImpl;
 import com.heinvdende.versionreview.test.client.ui.components.CustomComponents;
@@ -73,7 +73,7 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
     }
     
     // Logger Method
-    private void print(String text) {
+    public void print(String text) {
         String txt = textAreaOutput.getText();
         if(!text.equals(""))
             textAreaOutput.setText(txt + "> " + text + "\n");
@@ -81,11 +81,11 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
             textAreaOutput.setText(txt + "\n");
     }
     
-    private MainTask getCurrentTask() {
+    private Task getCurrentTask() {
         // Check if selected item is a task
         if(treeTasks.getSelectionPath().getLastPathComponent() instanceof TaskTreeNode) {
             TaskTreeNode taskNode = (TaskTreeNode) treeTasks.getSelectionPath().getLastPathComponent();
-            return (MainTask) taskNode.getTask();
+            return (Task) taskNode.getTask();
         }
         
         return null;
@@ -337,14 +337,14 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
     private void buttonOpenUserVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOpenUserVersionActionPerformed
         try
         {
-            MainTask task = getCurrentTask();
+            Task task = getCurrentTask();
             if(task != null) {
-                if(task.getClasses().size() > 0) {
+                if(task.getTaskClassList().size() > 0) {
                     //panelFilesTab.removeAll();
 
                     User user;
                     ChangedCodeFile finalFile;
-                    for(TaskClass taskClass : task.getClasses()) {
+                    for(TaskClass taskClass : task.getTaskClassList()) {
                         user = (User) listInvolvedUsers.getSelectedValue();
                         if(taskClass.getUserFinalFiles().containsKey(user)) {
                             finalFile = (ChangedCodeFile) taskClass.getUserFinalFiles().get(user);
@@ -446,8 +446,8 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
         if(tree.getSelectionPath().getLastPathComponent() instanceof TaskTreeNode) {
             TaskTreeNode taskNode = (TaskTreeNode) tree.getSelectionPath().getLastPathComponent();
 
-            MainTask task = (MainTask) taskNode.getTask();
-            List<User> users = task.getUsers();
+            Task task = (Task) taskNode.getTask();
+            List<User> users = task.getUserList();
 
             // Populate Users task
             listInvolvedUsers.removeAll();
@@ -461,19 +461,20 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
 
             // Show file tabs
             try {
-                if(task.getClasses().size() > 0) {
+                if(task.getTaskClassList().size() > 0) {
                     CompareFilesService service = new CompareFilesServiceImpl();
 
                     panelFilesTab.removeAll();
 
-                    for(TaskClass taskClass : task.getClasses()) {
+                    for(TaskClass taskClass : task.getTaskClassList()) {
                         taskClass = service.highlightFileChanges(taskClass);
+                        
+                        CodeViewPanel codeViewPanel = new CodeViewPanel(taskClass.getFinalFile());
+                        //SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(taskClass.getFinalFile());
+                        //highlighter.setHighlightOnMouseOver(true);
+                        //highlighter.getHighlighter().addMouseListener(new UICodeView.HighlightLineListener(highlighter.getHighlighter(), taskClass.getFinalFile()));
 
-                        SyntaxHighlighter highlighter = (SyntaxHighlighter) CustomComponents.getFileTab(taskClass.getFinalFile());
-                        highlighter.setHighlightOnMouseOver(true);
-                        highlighter.getHighlighter().addMouseListener(new UICodeView.HighlightLineListener(highlighter.getHighlighter(), taskClass.getFinalFile()));
-
-                        panelFilesTab.add(highlighter);
+                        panelFilesTab.add(codeViewPanel);
                     }
 
                     panelFilesTab.setSelectedIndex(0);

@@ -10,6 +10,7 @@ import com.heinvdende.versionreview.test.modules.filemembers.factory.FactoryFaca
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.strategy.StrategyChooser;
 import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
+import japa.parser.ASTHelper;
 import japa.parser.ast.Node;
 import java.util.ArrayList;
 import java.util.List;

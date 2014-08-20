@@ -7,13 +7,14 @@
 package com.heinvdende.versionreview.test.client.ui;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
 import com.heinvdende.versionreview.test.modules.repository.domain.Task;
 import com.heinvdende.versionreview.test.modules.repository.domain.User;
 import com.heinvdende.versionreview.test.client.generate.GenObjects;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes.MethodChanges;
 import com.heinvdende.versionreview.test.modules.filefunctions.UpdateClasses;
 import com.heinvdende.versionreview.test.modules.filefunctions.impl.UpdateClassesImpl;
+import com.heinvdende.versionreview.test.modules.repository.persistence.CodeFileRepository;
+import com.heinvdende.versionreview.test.modules.repository.persistence.factory.RepositoryFactory;
 import japa.parser.ast.body.MethodDeclaration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -282,7 +283,7 @@ public class UICodeDropUtility extends javax.swing.JFrame {
                     File droppedFile;
                     User user;
                     String userStr;
-                    MainTask task;
+                    Task task;
                     
                     for(int i=0;i<files.length;i++) {
                         droppedFile = files[i];
@@ -298,9 +299,9 @@ public class UICodeDropUtility extends javax.swing.JFrame {
                             CodeFile file = new CodeFile();
                             file.setFilePath(droppedFile.getPath());
                             file.setUser(user);
-
+                            
                             UpdateClasses service = new UpdateClassesImpl();
-                            MainTask newTask = service.addClass(file, task);
+                            Task newTask = service.addClass(file, task);
                             
                             // GEN update task
                             GenObjects.getInstance().setTask(newTask, getCurrentTask().getName());
@@ -326,7 +327,7 @@ public class UICodeDropUtility extends javax.swing.JFrame {
     /**
      * Other Methods
      */
-    private MainTask getCurrentTask() {
+    private Task getCurrentTask() {
         String task = comboBoxTasks.getSelectedItem().toString();
         return GenObjects.getInstance().getTask(task);
     }

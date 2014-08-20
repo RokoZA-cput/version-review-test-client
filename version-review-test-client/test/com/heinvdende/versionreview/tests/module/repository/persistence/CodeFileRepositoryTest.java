@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- *
+ * Includes Test for CodeFileRepository and ClassMemberRepository
  * @author Heinrich
  */
 public class CodeFileRepositoryTest {
@@ -51,6 +51,7 @@ public class CodeFileRepositoryTest {
         member2.setType("Type2");
         member2.setParentMember(member1);
         
+        // Test CodeFile
         newCodeFile = new CodeFile();
         newCodeFile.setFilePath("File Path");
         newCodeFile.setVersion(1);
@@ -59,7 +60,7 @@ public class CodeFileRepositoryTest {
         newCodeFile = repo.createEntity(newCodeFile);
         
         Assert.assertNotNull(newCodeFile.getId());
-        
+
         repo.flush();
     }
 
@@ -70,6 +71,8 @@ public class CodeFileRepositoryTest {
         Assert.assertNotNull(codeFile);
         Assert.assertEquals(codeFile.getId(), newCodeFile.getId());
         Assert.assertEquals(codeFile.getClassMemberList().size(), newCodeFile.getClassMemberList().size());
+        
+        newCodeFile = codeFile;
         
         ClassMember member = memberRepo.getEntity(codeFile.getClassMemberList().get(0).getId());
         

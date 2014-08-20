@@ -12,7 +12,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,13 +44,13 @@ public class User implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
     
-    @ManyToMany(mappedBy = "userList", cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "userList", cascade = CascadeType.MERGE) //
     private List<Task> taskList = new ArrayList<>();
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user") //
     private List<CodeFile> codeFileList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user") //
     private List<FileChange> fileChangeList;
 
     public User() {
@@ -106,6 +105,12 @@ public class User implements Serializable {
     public void addTask(Task task) {
         this.getTaskList().add(task);
         task.getUserList().add(this);
+    }
+    
+    public void addTasks(List<Task> tasks) {
+        for(Task t : tasks) {
+            addTask(t);
+        }
     }
     
     public void removeTask(Task task) {

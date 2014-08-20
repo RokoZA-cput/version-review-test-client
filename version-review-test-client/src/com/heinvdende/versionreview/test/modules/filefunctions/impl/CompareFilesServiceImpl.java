@@ -19,6 +19,8 @@ import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
+import com.heinvdende.versionreview.test.modules.repository.persistence.TaskClassRepository;
+import com.heinvdende.versionreview.test.modules.repository.persistence.factory.RepositoryFactory;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
@@ -26,7 +28,6 @@ import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +68,6 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         file.setChanges(fileChanges);
         
         task.setFinalFile(file);
-        
         return task;
     }
 
@@ -93,9 +93,8 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         // Use the committed file as the old version
         GetCommittedFileService service = new GetCommittedFileServiceImpl();
         String oldFilePath = service.getCommittedFile(newVersion.getFilePath());
-        
-        CodeFile oldVersion = null;
-        oldVersion = new CodeFile();
+
+        CodeFile oldVersion = new CodeFile();
         oldVersion.setFilePath(oldFilePath);
         
         ChangedCodeFile file = new ChangedCodeFile();
@@ -110,7 +109,7 @@ public class CompareFilesServiceImpl implements CompareFilesService {
     public ChangedCodeFile getVersionDeletions(CodeFile oldVersion, CodeFile newVersion) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     private List<FileChange> getChanges(CodeFile oldVersion, CodeFile newVersion){
 
         ClassOrInterfaceDeclaration oldClass = getClassDeclarations(oldVersion.getFilePath());
@@ -166,24 +165,5 @@ public class CompareFilesServiceImpl implements CompareFilesService {
         }
         
         return null;
-    }
-    
-    private CodeFile createDummyFile() {
-        PrintWriter pw = null;
-        CodeFile file = null;
-        
-        try {
-            pw = new PrintWriter("\\dummy.java", "UTF-8");
-            pw.println("");
-            pw.close();
-            
-            file = new CodeFile();
-            file.setFilePath("\\dummy.java");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        
-        return file;
     }
 }

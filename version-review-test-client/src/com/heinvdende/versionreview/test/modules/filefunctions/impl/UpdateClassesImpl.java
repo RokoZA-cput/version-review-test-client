@@ -7,13 +7,17 @@
 package com.heinvdende.versionreview.test.modules.filefunctions.impl;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
 import com.heinvdende.versionreview.test.modules.filefunctions.CompareFilesService;
 import com.heinvdende.versionreview.test.modules.filefunctions.UpdateClasses;
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
 import com.heinvdende.versionreview.test.modules.repository.domain.TaskClass;
 import com.heinvdende.versionreview.test.modules.repository.domain.User;
+import com.heinvdende.versionreview.test.modules.repository.persistence.CodeFileRepository;
+import com.heinvdende.versionreview.test.modules.repository.persistence.TaskClassRepository;
+import com.heinvdende.versionreview.test.modules.repository.persistence.TaskRepository;
+import com.heinvdende.versionreview.test.modules.repository.persistence.factory.RepositoryFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,8 +37,8 @@ public class UpdateClassesImpl implements UpdateClasses {
     private static final String DATA_PATH = "C:\\Users\\Heinrich\\workspace\\VersionReview\\Data\\";
     
     @Override
-    public MainTask addClass(CodeFile file, MainTask task) {
-        List<TaskClass> taskClasses = task.getClasses();
+    public Task addClass(CodeFile file, Task task) {
+        List<TaskClass> taskClasses = task.getTaskClassList();
         
         User user = file.getUser();
         int index = file.getFilePath().lastIndexOf('\\');
@@ -89,7 +93,7 @@ public class UpdateClassesImpl implements UpdateClasses {
             //file.setFilePath(newPath);
             
             if(!isClassFound) {
-                // If class was not found, create new TaskClass for the MainTask
+                // If class was not found, create new TaskClass for the Task
                 TaskClass newTaskClass = new TaskClass();
                 newTaskClass.setClassName(name);
                 
@@ -103,7 +107,7 @@ public class UpdateClassesImpl implements UpdateClasses {
 
                 newTaskClass.setCodeFileList(newFileList);
 
-                task.getClasses().add(newTaskClass);
+                task.addTaskClass(newTaskClass);
             }
             else {
                 // If class was found, just add update the final map with the user and file

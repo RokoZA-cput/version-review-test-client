@@ -20,8 +20,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -47,17 +47,17 @@ public class TaskClass implements Serializable {
     @Column(name = "CLASSNAME")
     private String className;
     
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "taskClass")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "taskClass") //
     private List<CodeFile> codeFileList;
     
     @JoinColumn(name = "TASKID", referencedColumnName = "ID")
     @ManyToOne
     private Task task;
 
-    @Transient
+    @OneToOne
     private ChangedCodeFile finalFile;
     
-    @Transient
+    @OneToMany
     private Map<User, ChangedCodeFile> userFinalFiles = new HashMap<>(); // cannot be retrieved from database, should be set in some functionality
     
     public TaskClass() {

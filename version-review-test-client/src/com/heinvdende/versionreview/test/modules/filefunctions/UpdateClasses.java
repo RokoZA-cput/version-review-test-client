@@ -7,12 +7,12 @@
 package com.heinvdende.versionreview.test.modules.filefunctions;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
-import com.heinvdende.versionreview.test.modules.repository.domain.MainTask;
+import com.heinvdende.versionreview.test.modules.repository.domain.Task;
 
 /**
  *
  * @author Heinrich
  */
 public interface UpdateClasses {
-    public MainTask addClass(CodeFile file, MainTask task);
+    public Task addClass(CodeFile file, Task task);
 }

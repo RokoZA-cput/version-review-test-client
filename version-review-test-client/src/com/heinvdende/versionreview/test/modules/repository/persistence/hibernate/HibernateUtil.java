@@ -6,6 +6,7 @@
 
 package com.heinvdende.versionreview.test.modules.repository.persistence.hibernate;
 
+import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
 import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
 import com.heinvdende.versionreview.test.modules.repository.domain.CodeFile;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
@@ -38,6 +39,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(FileChange.class)
                     .addAnnotatedClass(ClassMember.class)
                     .addAnnotatedClass(TaskClass.class)
+                    .addAnnotatedClass(ChangedCodeFile.class)
                     .configure().buildSessionFactory();
         } catch (Throwable ex) {
             // Log the exception. 

@@ -65,21 +65,22 @@ public class Task implements Serializable {
     @JoinTable(name = "USERTASKS", joinColumns = {
         @JoinColumn(name = "USERID", referencedColumnName = "ID")}, inverseJoinColumns = {
         @JoinColumn(name = "TASKID", referencedColumnName = "ID")})
-    @ManyToMany
+    @ManyToMany //(fetch = FetchType.EAGER)
     private List<User> userList = new ArrayList<>();
     
     @ManyToOne
     private Project project;
     
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "parentTask")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "parentTask") //
     private List<Task> subTasks;
     
     @JoinColumn(name = "PARENTTASKID", referencedColumnName = "ID")
     @ManyToOne
     private Task parentTask;
     
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "task")
-    private List<TaskClass> taskClassList;
+    @JoinColumn(name = "TASKID", referencedColumnName = "ID")
+    @OneToMany(cascade=CascadeType.ALL) //
+    private List<TaskClass> taskClassList = new ArrayList<>();
 
     public Task() {
     }
@@ -133,6 +134,12 @@ public class Task implements Serializable {
         user.getTaskList().add(this);
     }
     
+    public void addUsers(List<User> users) {
+        for(User u : users) {
+            addUser(u);
+        }
+    }
+    
     public void removeUser(User user) {
         this.getUserList().remove(user);
         user.getTaskList().remove(this);
@@ -176,6 +183,11 @@ public class Task implements Serializable {
         return taskClassList;
     }
 
+    public void addTaskClass(TaskClass taskClass) {
+        this.getTaskClassList().add(taskClass);
+        taskClass.setTask(this);
+    }
+    
     public void setTaskClassList(List<TaskClass> taskClassList) {
         this.taskClassList = taskClassList;
     }

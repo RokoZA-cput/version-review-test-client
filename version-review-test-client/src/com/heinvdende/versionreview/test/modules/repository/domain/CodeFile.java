@@ -7,11 +7,13 @@
 package com.heinvdende.versionreview.test.modules.repository.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,8 +57,9 @@ public class CodeFile implements Serializable {
     @ManyToOne
     private User user;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codeFile")
-    private List<ClassMember> classMemberList;
+    @JoinColumn(name = "CODEFILEID", referencedColumnName = "ID")
+    @OneToMany(cascade = CascadeType.ALL)   //
+    private List<ClassMember> classMemberList = new ArrayList<>();
 
     public CodeFile() {
     }

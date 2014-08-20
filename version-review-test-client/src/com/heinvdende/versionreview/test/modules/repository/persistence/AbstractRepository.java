@@ -6,11 +6,14 @@
 
 package com.heinvdende.versionreview.test.modules.repository.persistence;
 
+import com.heinvdende.versionreview.test.modules.repository.persistence.fetch.FetchEntity.FetchEntity;
+import com.heinvdende.versionreview.test.modules.repository.persistence.fetch.FetchEntity.GetFetchStrategy;
 import com.heinvdende.versionreview.test.modules.repository.persistence.hibernate.HibernateUtil;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,7 +64,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
     }
 
     public T updateEntity(T entity) {
-        session.merge(entity);
+        entity = (T) session.merge(entity);
         return entity;
     }
 
@@ -70,7 +73,9 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
     }
     
     protected List<T> findByCriteria(Criterion... criterion) {  
-        Criteria crit = getSession().createCriteria(getEntityClass());  
+        Criteria crit = getSession().createCriteria(getEntityClass());
+        crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
         for (Criterion c : criterion) {  
             crit.add(c);  
         }  
@@ -81,13 +86,26 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
         return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]; 
     }
     
+    // Fetch All
+    public void fetchAll(T entity) {
+        FetchEntity fetcher = GetFetchStrategy.getFetchStrategy(getEntityClass());
+        fetcher.fetchEntity(entity);
+    }
+    
+    public void fetchAll(List<T> entities) {
+        FetchEntity fetcher = GetFetchStrategy.getFetchStrategy(getEntityClass());
+        for(T entity : entities) {
+            fetcher.fetchEntity(entity);
+        }
+    }
+    
     // Commit Transaction & End Session
     public void commit() {
         try {
             getTransaction().commit();
         }
         catch(RuntimeException e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
             getTransaction().rollback();  
         }  
         finally {  

@@ -9,7 +9,6 @@ package com.heinvdende.versionreview.test.modules.repository.domain;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -62,18 +61,30 @@ public class FileChange implements Serializable {
     private Integer markerType;
     
     @JoinColumn(name = "MEMBERID", referencedColumnName = "ID")
-    @OneToOne(cascade=CascadeType.PERSIST)
+    @OneToOne
     private ClassMember classMember;
     
     @JoinColumn(name = "USERID", referencedColumnName = "ID")
     @ManyToOne
     private User user;
-
+    
+    @JoinColumn(name = "CODEFILEID", referencedColumnName = "ID")
+    @ManyToOne
+    private ChangedCodeFile codeFile;
+    
     public FileChange() {
     }
 
     public FileChange(Integer id) {
         this.id = id;
+    }
+
+    public ChangedCodeFile getCodeFile() {
+        return codeFile;
+    }
+
+    public void setCodeFile(ChangedCodeFile codeFile) {
+        this.codeFile = codeFile;
     }
 
     public Integer getId() {
