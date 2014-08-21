@@ -62,6 +62,14 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="removeCodeModeButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="selectAllChangesButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="unselectAllChangesButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="removeSelectedChangedButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="buttonBack" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -72,7 +80,13 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
-                  <Component id="buttonBack" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="buttonBack" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="removeCodeModeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="selectAllChangesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="removeSelectedChangedButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="unselectAllChangesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -88,6 +102,35 @@
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="removeCodeModeButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Remove Code Mode"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeCodeModeButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="selectAllChangesButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Select All Changes"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectAllChangesButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="removeSelectedChangedButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Remove Selection"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="unselectAllChangesButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Unselect All Changes"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="unselectAllChangesButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -167,14 +210,14 @@
                               <Component id="buttonRefresh" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="textSearch" alignment="3" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="714" max="32767" attributes="0"/>
+                          <EmptySpace pref="710" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                               <Component id="panelProjectFilters" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="698" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="694" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

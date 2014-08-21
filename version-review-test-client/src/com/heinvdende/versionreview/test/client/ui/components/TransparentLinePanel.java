@@ -7,6 +7,7 @@
 package com.heinvdende.versionreview.test.client.ui.components;
 
 import com.heinvdende.versionreview.test.client.ui.UICodeView;
+import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,14 +25,19 @@ public class TransparentLinePanel extends javax.swing.JPanel {
     public static final Color MOD_COLOUR = new Color(196, 222, 31, 80);
     public static final Color DEFAULT_COLOUR = new Color(0,0,0,0);
     public static final Color HIGHLIGHT_COLOUR = new Color(143,152,191,80);
-    public static final Color SELECTED_COLOUR = new Color(66,83,149,80);
+    public static final Color PRESSED_COLOUR = new Color(66,83,149,80);
+    public static final Color SELECTED_COLOUR = new Color(195,111,111,80);
     
     private static final int ROW_HEIGHT = 15;
+    
+    private boolean isSelectable = false;
+    private boolean isSelected = false;
     
     private Color color = DEFAULT_COLOUR;
     private Color tmpColor = null;
     // Changes that this line is part of
     private List<FileChange> changes = new ArrayList<>();
+    private ClassMember member;
     
     /**
      * Creates new form TransaprentLinePanel
@@ -56,7 +62,42 @@ public class TransparentLinePanel extends javax.swing.JPanel {
     public void addFileChange(FileChange change) {
         changes.add(change);
     }
+    
+    public void makeSelectable(boolean isSelectable) {
+        if(changes.size() > 0)
+            this.isSelectable = isSelectable;
+    }
 
+    public void selectLine() {
+        if(!isSelected) {
+            setBackground(SELECTED_COLOUR);
+            isSelected = true;
+            getParent().getParent().repaint();
+            
+            if(member != null) {
+                LinesPanel parent = (LinesPanel) getParent();
+                parent.selectAllLines(member);
+            }
+        }   
+    }
+    
+    public void unselectLine() {
+        if(isSelected) {
+            setBackground(color);
+            isSelected = false;
+            getParent().getParent().repaint();
+            
+            if(member != null) {
+                LinesPanel parent = (LinesPanel) getParent();
+                parent.unselectAllLines(member);
+            }
+        }
+    }
+    
+    public void setMember(ClassMember member) {
+        this.member = member;
+    }
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g); //To change body of generated methods, choose Tools | Templates.
@@ -109,19 +150,31 @@ public class TransparentLinePanel extends javax.swing.JPanel {
         UICodeView frame = (UICodeView) SwingUtilities.getWindowAncestor(this);
         for(FileChange change : changes)
             frame.print(change.getUser().getUsername() + " " + change.getType() + " this " + change.getClassMember().getType() +".");
-        frame.print("");
+        if(changes.size() > 0)
+            frame.print("");
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        setBackground(SELECTED_COLOUR);
+        setBackground(PRESSED_COLOUR);
         getParent().getParent().repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+        
+        if(isSelectable) {
+            if(!isSelected)
+                selectLine();
+            else
+                unselectLine();
+            
+            return;
+        }
+        
         if(tmpColor != null)
             setBackground(tmpColor);
         else
             setBackground(color);
+        
         getParent().getParent().repaint();
     }//GEN-LAST:event_formMouseReleased
 
@@ -132,8 +185,13 @@ public class TransparentLinePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseEntered
 
     private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
-        setBackground(color);
-        tmpColor = null;
+        if(isSelected) {
+            setBackground(SELECTED_COLOUR);
+        }
+        else {
+            setBackground(color);
+            tmpColor = null; 
+        }
         getParent().getParent().repaint();
     }//GEN-LAST:event_formMouseExited
 

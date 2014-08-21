@@ -14,7 +14,7 @@ import java.io.File;
  */
 
 public interface GetCommittedFileService {
-    public File getCommittedFile();
     public String getFinalFile(String fileName);
     public String getCommittedFile(String file);
+    public boolean isRepositoryUsed();
 }

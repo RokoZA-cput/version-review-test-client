@@ -7,17 +7,7 @@
 package com.heinvdende.versionreview.test.client.ui.components;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
-import com.heinvdende.versionreview.test.client.services.LineNumber;
-import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
-import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
-import javax.swing.text.Highlighter;
 import syntaxhighlight.SyntaxHighlighter;
 import syntaxhighlighter.SyntaxHighlighterParser;
 import syntaxhighlighter.brush.BrushJava;

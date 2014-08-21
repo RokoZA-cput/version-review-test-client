@@ -13,13 +13,16 @@ import com.heinvdende.versionreview.test.client.generate.GenObjects;
 import com.heinvdende.versionreview.test.modules.filemembers.codecompare.changes.MethodChanges;
 import com.heinvdende.versionreview.test.modules.filefunctions.UpdateClasses;
 import com.heinvdende.versionreview.test.modules.filefunctions.impl.UpdateClassesImpl;
-import com.heinvdende.versionreview.test.modules.repository.persistence.CodeFileRepository;
-import com.heinvdende.versionreview.test.modules.repository.persistence.factory.RepositoryFactory;
 import japa.parser.ast.body.MethodDeclaration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.iharder.dnd.FileDrop;
 
 /**

@@ -18,12 +18,15 @@ import com.heinvdende.versionreview.test.modules.filefunctions.impl.CompareFiles
 import com.heinvdende.versionreview.test.client.ui.components.CustomComponents;
 import com.heinvdende.versionreview.test.client.ui.components.TaskTreeNode;
 import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JTree;
+import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -105,6 +108,10 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
         jMenuItem1 = new javax.swing.JMenuItem();
         panelTop = new javax.swing.JPanel();
         buttonBack = new javax.swing.JButton();
+        removeCodeModeButton = new javax.swing.JButton();
+        selectAllChangesButton = new javax.swing.JButton();
+        removeSelectedChangedButton = new javax.swing.JButton();
+        unselectAllChangesButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         panelProjectTree = new javax.swing.JPanel();
@@ -137,12 +144,43 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
         buttonBack.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         buttonBack.setFocusable(false);
 
+        removeCodeModeButton.setText("Remove Code Mode");
+        removeCodeModeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeCodeModeButtonActionPerformed(evt);
+            }
+        });
+
+        selectAllChangesButton.setText("Select All Changes");
+        selectAllChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectAllChangesButtonActionPerformed(evt);
+            }
+        });
+
+        removeSelectedChangedButton.setText("Remove Selection");
+
+        unselectAllChangesButton.setText("Unselect All Changes");
+        unselectAllChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unselectAllChangesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTopLayout = new javax.swing.GroupLayout(panelTop);
         panelTop.setLayout(panelTopLayout);
         panelTopLayout.setHorizontalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTopLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(removeCodeModeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(selectAllChangesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(unselectAllChangesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removeSelectedChangedButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(buttonBack)
                 .addContainerGap())
         );
@@ -150,7 +188,12 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTopLayout.createSequentialGroup()
                 .addGap(0, 11, Short.MAX_VALUE)
-                .addComponent(buttonBack))
+                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonBack)
+                    .addComponent(removeCodeModeButton)
+                    .addComponent(selectAllChangesButton)
+                    .addComponent(removeSelectedChangedButton)
+                    .addComponent(unselectAllChangesButton)))
         );
 
         jPanel1.setForeground(new java.awt.Color(181, 181, 194));
@@ -213,13 +256,13 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
                 .addGroup(panelProjectTreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonRefresh)
                     .addComponent(textSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(714, Short.MAX_VALUE))
+                .addContainerGap(710, Short.MAX_VALUE))
             .addGroup(panelProjectTreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelProjectTreeLayout.createSequentialGroup()
                     .addGap(37, 37, 37)
                     .addComponent(panelProjectFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)))
         );
 
         jSplitPane2.setLeftComponent(panelProjectTree);
@@ -376,6 +419,49 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
         treeTasks.setSelectionPath(treeTasks.getSelectionPath());
     }//GEN-LAST:event_buttonRefreshActionPerformed
 
+    private void removeCodeModeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCodeModeButtonActionPerformed
+        List<CodeViewPanel> panels = new ArrayList<>();
+        int count = panelFilesTab.getTabCount();
+        for(int i=0;i<count;i++) {
+            panels.add((CodeViewPanel) panelFilesTab.getComponentAt(i));
+        }
+        
+        for(CodeViewPanel p : panels) {
+            if(!p.isSelectable()) {
+                removeCodeModeButton.setBorder(new LineBorder(Color.red, 1));
+                p.makeSelectable(true);
+            }
+            else {
+                removeCodeModeButton.setBorder(null);
+                p.makeSelectable(false);
+            }
+        }
+    }//GEN-LAST:event_removeCodeModeButtonActionPerformed
+
+    private void selectAllChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllChangesButtonActionPerformed
+        List<CodeViewPanel> panels = new ArrayList<>();
+        int count = panelFilesTab.getTabCount();
+        for(int i=0;i<count;i++) {
+            panels.add((CodeViewPanel) panelFilesTab.getComponentAt(i));
+        }
+        
+        for(CodeViewPanel p : panels) {
+            p.selectAllChanges();
+        }
+    }//GEN-LAST:event_selectAllChangesButtonActionPerformed
+
+    private void unselectAllChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unselectAllChangesButtonActionPerformed
+        List<CodeViewPanel> panels = new ArrayList<>();
+        int count = panelFilesTab.getTabCount();
+        for(int i=0;i<count;i++) {
+            panels.add((CodeViewPanel) panelFilesTab.getComponentAt(i));
+        }
+        
+        for(CodeViewPanel p : panels) {
+            p.unselectAllChanges();
+        }
+    }//GEN-LAST:event_unselectAllChangesButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -431,9 +517,13 @@ public class UICodeView extends JFrame implements TreeSelectionListener {
     private javax.swing.JPanel panelProjectTree;
     private javax.swing.JPanel panelTop;
     private javax.swing.JRadioButton radioViewUserCode;
+    private javax.swing.JButton removeCodeModeButton;
+    private javax.swing.JButton removeSelectedChangedButton;
+    private javax.swing.JButton selectAllChangesButton;
     private javax.swing.JEditorPane textAreaOutput;
     private javax.swing.JTextField textSearch;
     private javax.swing.JTree treeTasks;
+    private javax.swing.JButton unselectAllChangesButton;
     // End of variables declaration//GEN-END:variables
 
     

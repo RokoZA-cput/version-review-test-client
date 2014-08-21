@@ -52,7 +52,7 @@ public class StatementChanges extends MemberChangesStrategy {
 
     @Override
     public int getMarkerType() {
-        return FileChange.MARKER_UNDERLINE;
+        return FileChange.MARKER_HIGHLIGHT;
     }
     
 }

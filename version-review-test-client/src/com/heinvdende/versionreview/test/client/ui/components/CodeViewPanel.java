@@ -7,11 +7,15 @@
 package com.heinvdende.versionreview.test.client.ui.components;
 
 import com.heinvdende.versionreview.test.modules.repository.domain.ChangedCodeFile;
+import com.heinvdende.versionreview.test.modules.repository.domain.ClassMember;
+import com.heinvdende.versionreview.test.modules.repository.domain.FileChange;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLayeredPane;
@@ -26,6 +30,7 @@ public class CodeViewPanel extends JLayeredPane {
 
     private ChangedCodeFile codeFile;
     private SyntaxHighlighter codeViewPane;
+    private boolean isSelectable = false;
     /**
      * Creates new form CodeViewPanel
      */
@@ -43,28 +48,27 @@ public class CodeViewPanel extends JLayeredPane {
         linesScrollPane.getViewport().setOpaque(false);
         this.setLayer(linesScrollPane, JLayeredPane.PALETTE_LAYER);
         this.setLayer(codeViewPane, JLayeredPane.DEFAULT_LAYER);
-        linesScrollPane.setSize(200,200);
-        //linesScrollPane
     }
-    
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g); //To change body of generated methods, choose Tools | Templates.
-        if(codeViewPane.getWidth() == 0 && codeViewPane.getHeight() == 0)
-            codeViewPane.setSize(getSize());
-        /*if(linesPanel.getWidth() == 0)
-            linesPanel.setSize(getWidth(), getLineCount() * 15);*/
-    }
-    
+
     private void createLinePanel() {
         int lineCount = getLineCount();
+        
         linesPanel.addLines(lineCount, codeFile);
     }
     
     private void createSyntaxHighlighter() {
         try {
             codeViewPane = CustomComponents.getFileTab(codeFile);
-            add(codeViewPane);
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            c.fill = GridBagConstraints.BOTH;
+            c.gridx = 0;
+            c.gridy = 0;
+            c.weightx = 1.0;
+            c.weighty = 1.0;
+            c.anchor = GridBagConstraints.NORTHWEST;
+            add(codeViewPane, c);
         } catch (Exception ex) {
             Logger.getLogger(CodeViewPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,6 +80,35 @@ public class CodeViewPanel extends JLayeredPane {
 
     public void setCodeFile(ChangedCodeFile codeFile) {
         this.codeFile = codeFile;
+    }
+    
+    public void makeSelectable(boolean isSelectable) {
+        this.isSelectable = isSelectable;
+        linesPanel.makeSelectable(isSelectable);
+    }
+    
+    public boolean isSelectable() {
+        return isSelectable;
+    }
+    
+    public void selectAllChanges() {
+        if(isSelectable) {
+            List<FileChange> changes = codeFile.getChanges();
+            for(FileChange c : changes) {
+                if(c.getMarkerType() == FileChange.MARKER_HIGHLIGHT)
+                    linesPanel.selectAllLines(c.getClassMember());
+            }
+        }
+    }
+    
+    public void unselectAllChanges() {
+        if(isSelectable) {
+            List<FileChange> changes = codeFile.getChanges();
+            for(FileChange c : changes) {
+                if(c.getMarkerType() == FileChange.MARKER_HIGHLIGHT)
+                    linesPanel.unselectAllLines(c.getClassMember());
+            }
+        }
     }
     
     private int getLineCount() {
@@ -100,9 +133,12 @@ public class CodeViewPanel extends JLayeredPane {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         linesScrollPane = new javax.swing.JScrollPane();
         linesPanel = new com.heinvdende.versionreview.test.client.ui.components.LinesPanel();
+
+        setLayout(new java.awt.GridBagLayout());
 
         linesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         linesScrollPane.setOpaque(false);
@@ -120,16 +156,14 @@ public class CodeViewPanel extends JLayeredPane {
 
         linesScrollPane.setViewportView(linesPanel);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(linesScrollPane)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(linesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(linesScrollPane, gridBagConstraints);
         setLayer(linesScrollPane, javax.swing.JLayeredPane.PALETTE_LAYER);
     }// </editor-fold>//GEN-END:initComponents
 
